@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { randomWord, ENGLISH_WORDS} from "./words"
+import { randomWord, ENGLISH_WORDS } from "./words"
 import "./Snowman.css";
 import img0 from "./0.png";
 import img1 from "./1.png";
@@ -8,6 +8,8 @@ import img3 from "./3.png";
 import img4 from "./4.png";
 import img5 from "./5.png";
 import img6 from "./6.png";
+import gif from "./giphy.gif";
+import carlton from "./carlton.gif";
 
 
 /** Snowman game: plays hangman-style game with a melting snowman.
@@ -23,21 +25,19 @@ import img6 from "./6.png";
  * - answer: selected secret word*
  */
 
-function Snowman({
-  maxWrong = 6,
-  images = [img0, img1, img2, img3, img4, img5, img6],
-  words = [...ENGLISH_WORDS] }) {
+function Snowman({ maxWrong = 6, images = [img0, img1, img2, img3, img4, img5, img6] }) {
 
   /** by default, allow 6 guesses and use provided gallows images. */
 
   // Add new state for randomWord 
   const [nWrong, setNWrong] = useState(0); //Add the number of wrong guesses
   const [guessed, setGuessed] = useState(new Set());
-  const [answer, setAnswer] = useState(() => randomWord(ENGLISH_WORDS)); //random word goes here?
-  // setAnswer(randomWord(ENGLISH_WORDS));
+  const [answer, setAnswer] = useState(randomWord(ENGLISH_WORDS)); //random word goes here
+
   /** guessedWord: show current-state of word:
    if guessed letters are {a,p,e}, show "app_e" for "apple"
    */
+
   function guessedWord() {
     return answer
       .split("")
@@ -51,7 +51,6 @@ function Snowman({
   function handleGuess(evt) {
     let ltr = evt.target.value;
     setGuessed(g => {
-      console.log("THISS -->", g);
       const newGuessed = new Set(g); // Creates a set from the ltrs chosen
       newGuessed.add(ltr); // Adds ltr to the new set 
       return newGuessed; // return set
@@ -62,9 +61,9 @@ function Snowman({
   function reset() {
     setNWrong(0)
     setGuessed(new Set())
-    setAnswer(() => randomWord(ENGLISH_WORDS));
+    setAnswer(randomWord(ENGLISH_WORDS));
   }
- 
+  
 
   /** generateButtons: return array of letter buttons to render */
   function generateButtons() {
@@ -79,10 +78,11 @@ function Snowman({
       </button> //{ltr} === ^display the letter on button 
     ));
   }
- 
+
   if (nWrong === maxWrong) {
     return (<div>
-      <h3 className="lose">You lose!</h3><h5>{answer}</h5>
+      <h3 className="lose">You lose!</h3><h5>Correct Answer is: {answer}</h5>
+      <img src={gif}></img>
     </div>)
   }
   if (!(guessedWord().includes("_"))) {
@@ -90,6 +90,7 @@ function Snowman({
       <div>
         <h1> You wiiiinnnn!!!</h1>
         <h3>You are the smartest person alive!</h3>
+        <img src={carlton}></img>
       </div>
     )
   }
